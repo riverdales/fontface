@@ -34,6 +34,7 @@ const tpl = `
 			<th width = "80px">名称</th>
 			<th width = "100px">自定义文字</th>
 			<th width = "600px">默认文字</th>
+			<th width = "100px">格式</th>
 		</tr>
 		{{range .}}
 			<tr>
@@ -44,6 +45,7 @@ const tpl = `
 				<td style="font-family: {{.Family}}; font-size:24px">
 					The quick brown fox jumps over a lazy dog. 敏捷的棕色狐狸跳过了一只懒惰的狗
 				</td>
+				<td> {{.Format}}</td>
 			</tr>
 		{{end}}
 	<table>
@@ -72,7 +74,7 @@ func main() {
 	fs := http.FileServer(http.Dir("."))
 	http.Handle("/fonts/", http.StripPrefix("/fonts", fs))
 	http.HandleFunc("/", index)
-	fmt.Printf("Navigate to http://localhost:%d  to view font in current directory\n", port)
+	fmt.Printf("Navigate to http://localhost:%d  to view font in current directory\r\n", port)
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
 		log.Fatal(err)
 	}
@@ -100,6 +102,9 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 		if strings.HasSuffix(path, ".ttf") || strings.HasSuffix(path, ".TTF") {
 			fonts = append(fonts, Font{name[:len(name)-4], name, "truetype", text})
+		}
+		if strings.HasSuffix(path, ".otf") || strings.HasSuffix(path, ".OTF") {
+			fonts = append(fonts, Font{name[:len(name)-4], name, "opentype", text})
 		}
 
 		return err
