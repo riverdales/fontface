@@ -92,18 +92,13 @@ func index(w http.ResponseWriter, r *http.Request) {
 			return err
 		}
 		name := f.Name()
-		if strings.HasSuffix(path, ".woff2") || strings.HasSuffix(path, ".WOFF2") {
-			fonts = append(fonts, Font{name[:len(name)-6], name, "woff2", text})
-		}
-
-		if strings.HasSuffix(path, ".woff") || strings.HasSuffix(path, ".WOFF") {
-			fonts = append(fonts, Font{name[:len(name)-5], name, "woff", text})
-		}
-
 		if strings.HasSuffix(path, ".ttf") || strings.HasSuffix(path, ".TTF") {
 			fonts = append(fonts, Font{name[:len(name)-4], name, "truetype", text})
-		}
-		if strings.HasSuffix(path, ".otf") || strings.HasSuffix(path, ".OTF") {
+		} else if strings.HasSuffix(path, ".woff2") || strings.HasSuffix(path, ".WOFF2") {
+			fonts = append(fonts, Font{name[:len(name)-6], name, "woff2", text})
+		} else if strings.HasSuffix(path, ".woff") || strings.HasSuffix(path, ".WOFF") {
+			fonts = append(fonts, Font{name[:len(name)-5], name, "woff", text})
+		} else if strings.HasSuffix(path, ".otf") || strings.HasSuffix(path, ".OTF") {
 			fonts = append(fonts, Font{name[:len(name)-4], name, "opentype", text})
 		}
 
